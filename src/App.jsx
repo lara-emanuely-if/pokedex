@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./components/Navbar/Navbar";
+import Searchbar from "./components/Searchbar/Searchbar";
 import Pokedex from "./components/Pokedex/Pokedex";
 
 function App() {
 
   const [loading, setLoading] = useState(false);
   const [pokemons, setPokemons] = useState([]);
+  const [search, setSearch] = useState('');
 
   const getPokemons = async (limit = 200, offset = 0) => {
     try {
@@ -46,13 +48,20 @@ function App() {
     fetchPokemons();
   }, [])
 
+  const handleSearchValue = (value) => {
+    setSearch(value);
+  }
+
   return (
     <main>
       <div className="container">
         <Navbar />
+        <Searchbar 
+          onChangeSearchValue={handleSearchValue} 
+        />
         <Pokedex
           loading={loading} 
-          pokemons={pokemons} 
+          pokemons={pokemons.filter(pokemon => pokemon.name.includes(search.toLowerCase()))} 
         />
       </div>    
     </main>
